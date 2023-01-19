@@ -28,6 +28,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("./routes/user"));
+const project_1 = __importDefault(require("./routes/project"));
+const client_1 = __importDefault(require("./routes/client"));
+const sprint_1 = __importDefault(require("./routes/sprint"));
+const task_1 = __importDefault(require("./routes/task"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const dotenvExpand = require('dotenv-expand');
@@ -36,6 +40,10 @@ app.use(express_1.default.json());
 const dbConection = require("./config/dbconfig");
 dbConection();
 app.use("/user", user_1.default);
+app.use("/project", project_1.default);
+app.use("/client", client_1.default);
+app.use("/sprint", sprint_1.default);
+app.use("/task", task_1.default);
 app.listen(process.env.PORT, () => {
     console.log(`SERVER OPEN As RUNNIG ON PORT ${process.env.PORT}`);
 });
