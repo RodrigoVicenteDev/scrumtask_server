@@ -10,3 +10,11 @@ type User = {
 
 
   };
+
+  declare module 'express' {
+    export interface Request {
+      auth: any;
+      currentUser:any
+    }
+  }
+  

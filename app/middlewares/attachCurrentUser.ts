@@ -2,7 +2,7 @@ import UserModel from "../models/usermodel";
 import { NextFunction, Request, Response  }  from "express";
 
 
- async function attachCurrentUser(req :any, res:Response, next:NextFunction){
+ async function attachCurrentUser(req :Request<any>, res:Response, next:NextFunction){
     try {
         const loggedInUser = req.auth
         console.log(req.auth)
