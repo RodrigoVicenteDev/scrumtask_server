@@ -1,5 +1,4 @@
 import express from "express";
-import generateToken from "../config/jwtconfig";
 import isAuth from "../middlewares/isAuth";
 import attachCurrentUser from "../middlewares/attachCurrentUser";
 import UserModel from "../models/usermodel";
@@ -10,6 +9,14 @@ import TaskModel from "../models/taskmodel";
 const router = express.Router();
 
 
+router.post("/create",  async (req, res) => {
+    try {
+        const newsprint = await SprintModel.create(req.body);
+        return res.status(201).json(newsprint);
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 

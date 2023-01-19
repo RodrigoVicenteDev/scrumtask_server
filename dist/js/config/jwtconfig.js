@@ -25,10 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jwt = __importStar(require("jsonwebtoken"));
 function generateToken(user) {
-    const { _id, name, email, profilePic } = user;
+    const { _id, name, email, profilePic, scrumpaper } = user;
     const signature = process.env.TOKEN_SIGN_SECRET;
     const expiration = "5h";
-    return jwt.sign({ _id, name, email, profilePic }, signature, {
+    return jwt.sign({ _id, name, email, profilePic, scrumpaper }, signature, {
         expiresIn: expiration,
     });
 }

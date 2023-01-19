@@ -50,6 +50,7 @@ const userschema = new mongoose.Schema({
         type: String,
         default: "https://toppng.com/uploads/preview/instagram-default-profile-picture-11562973083brycehrmyv.png",
     },
+    scrumpaper: { type: String, enum: ["productOwner", "scrumMaster", "devTeam"], require: true },
 });
 const UserModel = mongoose.model("User", userschema);
 exports.default = UserModel;

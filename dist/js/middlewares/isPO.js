@@ -12,16 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const sprintmodels_1 = __importDefault(require("../models/sprintmodels"));
-const router = express_1.default.Router();
-router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const newsprint = yield sprintmodels_1.default.create(req.body);
-        return res.status(201).json(newsprint);
-    }
-    catch (error) {
-        console.log(error);
-    }
-}));
-exports.default = router;
+const usermodel_1 = __importDefault(require("../models/usermodel"));
+function isPO(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = yield usermodel_1.default.findById(req.currentUser.id);
+            if ((user === null || user === void 0 ? void 0 : user.scrumpaper) === "productOwner") {
+                return next();
+            }
+            return res.status(401).send("You are not a productOwner");
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.default = isPO;

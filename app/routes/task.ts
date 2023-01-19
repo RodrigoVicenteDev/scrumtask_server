@@ -1,5 +1,4 @@
 import express from "express";
-import generateToken from "../config/jwtconfig";
 import isAuth from "../middlewares/isAuth";
 import attachCurrentUser from "../middlewares/attachCurrentUser";
 import UserModel from "../models/usermodel";
