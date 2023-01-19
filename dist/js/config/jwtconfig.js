@@ -22,20 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const user_1 = __importDefault(require("./routes/user"));
-const dotenv = __importStar(require("dotenv"));
-dotenv.config();
-const dotenvExpand = require('dotenv-expand');
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-const dbConection = require("./config/dbconfig");
-dbConection();
-app.use("/user", user_1.default);
-app.listen(process.env.PORT, () => {
-    console.log(`SERVER OPEN As RUNNIG ON PORT ${process.env.PORT}`);
-});
+const jwt = __importStar(require("jsonwebtoken"));
+function generateToken(user) {
+    const { _id, name, email, profilePic } = user;
+    const signature = process.env.TOKEN_SIGN_SECRET;
+    const expiration = "5h";
+    return jwt.sign({ _id, name, email, profilePic }, signature, {
+        expiresIn: expiration,
+    });
+}
+exports.default = generateToken;

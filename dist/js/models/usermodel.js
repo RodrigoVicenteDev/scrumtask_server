@@ -22,20 +22,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const user_1 = __importDefault(require("./routes/user"));
-const dotenv = __importStar(require("dotenv"));
-dotenv.config();
-const dotenvExpand = require('dotenv-expand');
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-const dbConection = require("./config/dbconfig");
-dbConection();
-app.use("/user", user_1.default);
-app.listen(process.env.PORT, () => {
-    console.log(`SERVER OPEN As RUNNIG ON PORT ${process.env.PORT}`);
+const mongoose = __importStar(require("mongoose"));
+const userschema = new mongoose.Schema({
+    name: {
+        type: String,
+        require: true,
+    },
+    email: {
+        type: String,
+        match: /^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+        require: true,
+        unique: true,
+    },
+    passwordHash: {
+        type: String,
+        require: true,
+    },
+    sector: {
+        type: String,
+        require: true,
+    },
+    project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+    sprint: { type: mongoose.Schema.Types.ObjectId, ref: "Sprint" },
+    task: { type: mongoose.Schema.Types.ObjectId, ref: "Task" },
+    profilePic: {
+        type: String,
+        default: "https://toppng.com/uploads/preview/instagram-default-profile-picture-11562973083brycehrmyv.png",
+    },
 });
+const UserModel = mongoose.model("User", userschema);
+exports.default = UserModel;
