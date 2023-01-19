@@ -9,6 +9,7 @@ import generateToken from "../config/jwtconfig";
 import isAuth from "../middlewares/isAuth";
 import attachCurrentUser from "../middlewares/attachCurrentUser";
 import UserModel from "../models/usermodel";
+import { User } from "../../custom-express-types";
 
 // SignUp ###################################################################
 
@@ -74,34 +75,42 @@ router.post("/login", async (req, res) => {
 
 // Rota para editar usuario ###############################################################
 
-router.put("/editar", isAuth, attachCurrentUser, async (req:any, res) => {
-    try {
-      const loggedInUser = req.currentUser;
-  
-      const editarusuario = await UserModel.findByIdAndUpdate(
-        loggedInUser._id,
-        { ...req.body },
-        { new: true, runValidators: true }
-      ) as any;
-      delete editarusuario._doc.passwordHash;
-      return res.status(200).json(editarusuario);
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json(error);
-    }
-  });
+router.put("/edit", isAuth, attachCurrentUser, async (req: any, res) => {
+  try {
+    const loggedInUser = req.currentUser;
+
+    const editarusuario = (await UserModel.findByIdAndUpdate(
+      loggedInUser._id,
+      { ...req.body },
+      { new: true, runValidators: true }
+    )) as any;
+    delete editarusuario._doc.passwordHash;
+    return res.status(200).json(editarusuario);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
 
 
 router.get("/all", async (req, res) => {
-    try {
-      const todos = await UserModel.find();
-  
-      return res.status(200).json(todos);
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json(error);
-    }
-  });
+  try {
+    const todos = (await UserModel.find()) as any;
+  const usuarios:User[] = []
+  todos.map((todo:any) => {
+    delete todo._doc.passwordHash;
+    usuarios.push(todo)
+  })
+    return res.status(200).json(usuarios);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
+
+
+
 
 
 

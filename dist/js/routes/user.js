@@ -70,10 +70,10 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 // Rota para editar usuario ###############################################################
-router.put("/editar", isAuth_1.default, attachCurrentUser_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/edit", isAuth_1.default, attachCurrentUser_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const loggedInUser = req.currentUser;
-        const editarusuario = yield usermodel_1.default.findByIdAndUpdate(loggedInUser._id, Object.assign({}, req.body), { new: true, runValidators: true });
+        const editarusuario = (yield usermodel_1.default.findByIdAndUpdate(loggedInUser._id, Object.assign({}, req.body), { new: true, runValidators: true }));
         delete editarusuario._doc.passwordHash;
         return res.status(200).json(editarusuario);
     }
@@ -84,8 +84,13 @@ router.put("/editar", isAuth_1.default, attachCurrentUser_1.default, (req, res) 
 }));
 router.get("/all", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todos = yield usermodel_1.default.find();
-        return res.status(200).json(todos);
+        const todos = (yield usermodel_1.default.find());
+        const usuarios = [];
+        todos.map((todo) => {
+            delete todo._doc.passwordHash;
+            usuarios.push(todo);
+        });
+        return res.status(200).json(usuarios);
     }
     catch (error) {
         console.log(error);
